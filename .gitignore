@@ -1,6 +1,9 @@
 # Codex/system-managed skills
 .system/
 
+# Planning/design artifacts from superpowers workflows
+docs/superpowers/
+
 # Local scratch and generated output
 tmp/
 temp/

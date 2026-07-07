@@ -1,15 +1,15 @@
 ---
-name: after-skill-creation
-description: Use after Codex creates or updates one of the user's personal skills and the user wants local skill changes reflected in their GitHub skill collection repository. Triggers include "after skill creation", "스킬 만든 뒤 깃허브에 올려", "개인 스킬을 repo에 반영", "스킬 모음집 repo에 올려", or any request to validate, commit, and push newly created or modified skill files.
+name: skill-manager
+description: Manage this personal Codex skill repository at C:\Users\wooch\.codex\skills. Use when the user asks to create, update, rename, remove, validate, commit, or push personal skills; sync local skill changes to GitHub; update AGENTS.md or .gitignore for the skill repo; or says "스킬 관리", "스킬 repo 반영", "스킬 만든 뒤 깃허브에 올려", "개인 스킬을 repo에 반영".
 ---
 
-# After Skill Creation
+# Skill Manager
 
 ## Goal
 
-Publish personal skill changes from the local skill collection repository to GitHub without adding unrelated files.
+Maintain the user's personal Codex skill collection as both a local skill store and a Git repository.
 
-Use this skill only after the skill content itself has been created or updated. Do not create helper scripts or automation files unless the user explicitly asks for them.
+Use this skill when skill folders under `C:\Users\wooch\.codex\skills` are created, updated, renamed, removed, validated, committed, or pushed. Do not create helper scripts or automation files unless the user explicitly asks for them.
 
 ## Workflow
 
@@ -19,8 +19,10 @@ Use this skill only after the skill content itself has been created or updated. 
    - If no GitHub remote is configured, ask the user for the target repository URL before pushing.
 
 2. Identify the skill changes.
-   - Include the new or changed skill folder and any directly related files the user requested.
-   - Exclude temporary files, generated previews, logs, caches, and unrelated worktree changes.
+   - Include the new, changed, renamed, or removed skill folder and any directly related repository files the user requested.
+   - Keep `AGENTS.md` in sync with current personal skills when skill inventory changes.
+   - Keep `.gitignore` aligned with the repository's role as a local skill store.
+   - Exclude system-provided skills, temporary files, generated previews, logs, caches, superpowers planning artifacts, and unrelated worktree changes.
    - If the worktree contains unrelated user changes, leave them untouched.
 
 3. Validate the skill when a validator is available.
@@ -32,8 +34,8 @@ Use this skill only after the skill content itself has been created or updated. 
    - Use explicit paths with `git add`.
    - Re-run `git status --short` and confirm that only intended files are staged.
 
-5. Commit the skill update.
-   - Use a concise message such as `Add after-skill-creation skill` or `Update <skill-name> skill`.
+5. Commit the repository update.
+   - Use a concise message such as `Add <skill-name> skill`, `Update <skill-name> skill`, `Rename <old-name> skill to <new-name>`, or `Update skill repository metadata`.
    - Do not amend or rewrite existing commits unless the user explicitly asks.
 
 6. Push to GitHub.
@@ -46,6 +48,7 @@ Use this skill only after the skill content itself has been created or updated. 
 - Never stage the entire repository with `git add .` when unrelated files are present.
 - Never delete, revert, or overwrite user changes to make the worktree clean.
 - Never commit temporary artifacts unless the user explicitly asks.
+- Never commit `.system/`, `docs/superpowers/`, caches, generated previews, logs, or local scratch output.
 - Never create PowerShell, shell, Python, or other helper scripts for this skill unless requested.
 - Prefer exact file paths in every Git command.
 

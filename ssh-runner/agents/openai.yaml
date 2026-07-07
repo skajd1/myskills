@@ -1,0 +1,4 @@
+interface:
+  display_name: "SSH Runner"
+  short_description: "Run commands on user-specified SSH servers with safety checks."
+  default_prompt: "Use $ssh-runner to connect to my server over SSH and run this command safely."

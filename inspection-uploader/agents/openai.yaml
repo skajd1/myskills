@@ -1,0 +1,6 @@
+interface:
+  display_name: "Inspection Uploader"
+  short_description: "Preview inspection PDFs before SharePoint upload."
+  default_prompt: "Use $inspection-uploader to preview scanned Outlook inspection PDFs for SharePoint upload."
+policy:
+  allow_implicit_invocation: true

@@ -1,0 +1,30 @@
+mail:
+  sender_allowlist:
+    - "scanner@example.com"
+  subject_keywords:
+    - "Scan Data"
+  max_messages: 50
+
+ocr:
+  mode: "codex_vision"
+
+graph:
+  client_id: "00000000-0000-0000-0000-000000000000"
+  tenant: "organizations"
+  scopes:
+    - "Mail.Read"
+    - "Files.ReadWrite.All"
+    - "Sites.ReadWrite.All"
+    - "User.Read"
+
+customers:
+  - id: "acme"
+    display_name: "ACME Korea"
+    aliases:
+      - "ACME Korea"
+      - "ACME"
+    sharepoint:
+      site_url: "https://tenant.sharepoint.com/sites/Inspection"
+      drive_name: "Documents"
+      folder_path: "Customers/ACME/Inspection"
+    filename_template: "{date:%Y%m%d}_{customer}_{original_stem}.pdf"

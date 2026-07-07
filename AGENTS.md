@@ -1,16 +1,37 @@
-# Personal Codex Skills
+# 개인 Codex 스킬 저장소
 
-This repository is the user's personal Codex skill collection. Each top-level skill folder contains a `SKILL.md` that defines when the skill should trigger and how Codex should use it.
+이 저장소는 사용자의 개인 Codex 스킬 컬렉션이자 로컬 스킬 저장소입니다. 각 최상위 스킬 폴더에는 `SKILL.md`가 있으며, 이 파일은 해당 스킬이 언제 발동하고 Codex가 어떤 절차로 사용해야 하는지 정의합니다.
 
-## Skill Index
+## 스킬 인덱스
 
-### after-skill-creation
+### skill-manager
 
-Publishes completed personal skill changes from the local skill collection repository to GitHub. Use after Codex creates or updates a personal skill and the work is ready to validate, commit, and push.
+이 저장소 자체를 관리하는 메인 스킬입니다. 개인 스킬 생성, 수정, 이름 변경, 삭제, 검증, 커밋, GitHub 푸시, `AGENTS.md`와 `.gitignore` 정합성 정리에 사용합니다.
 
-## Repository Notes
+### cover-letter-tailor
 
-- Keep one skill per top-level folder.
-- Keep each skill focused on the instructions and resources Codex needs to perform that skill.
-- Do not track system-provided skills, caches, temporary files, generated previews, logs, or local scratch output.
-- Add new skill summaries to this file when new personal skills are added to the repository.
+기업명, 직무, JD, 자기소개서 문항을 바탕으로 기존 경험 자료를 활용해 한국어 자기소개서 답변을 맞춤 작성합니다.
+
+### humanize-korean
+
+AI가 쓴 티가 나는 한국어 문장을 의미와 사실관계는 유지한 채 더 자연스러운 사람 문장으로 윤문합니다.
+
+### inspection-uploader
+
+Outlook으로 받은 검사 PDF를 스캔하고 고객사를 식별한 뒤, 승인된 파일을 SharePoint 업로드용으로 준비합니다.
+
+### ssh-runner
+
+사용자가 지정한 SSH 서버에 접속해 제한된 원격 명령을 실행하고 결과를 요약합니다.
+
+### youtube-shorts-pipeline
+
+한국어 YouTube Shorts 자동화 작업에서 주제 발굴, 대본 작성, 메타데이터 작성, 제작 흐름을 지원합니다.
+
+## 저장소 운영 규칙
+
+- 최상위 폴더 하나는 개인 스킬 하나를 의미합니다.
+- 각 스킬은 해당 작업을 수행하는 데 필요한 지침과 리소스에 집중합니다.
+- 시스템 제공 스킬, 캐시, 임시 파일, 생성 미리보기, 로그, 로컬 스크래치 출력, superpowers 설계/계획 문서는 Git에 추적하지 않습니다.
+- 개인 스킬을 추가, 삭제, 이름 변경하면 이 파일의 스킬 인덱스도 함께 갱신합니다.
+- 이 저장소에서 스킬 변경이 발생하고 GitHub 반영이 필요하면 `skill-manager` 스킬을 사용해 검증, 선택적 staging, commit, push 절차를 진행합니다.
