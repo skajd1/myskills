@@ -1,27 +1,16 @@
-# Repository Instructions
+# Personal Codex Skills
 
-## Personal Skill Completion Workflow
+This repository is the user's personal Codex skill collection. Each top-level skill folder contains a `SKILL.md` that defines when the skill should trigger and how Codex should use it.
 
-When Codex creates or updates a personal skill in this repository, treat the skill work as incomplete until the skill has been validated and published.
+## Skill Index
 
-After Codex judges that skill development is complete, and only after validation or manual inspection supports that judgment, automatically use the `after-skill-creation` skill without waiting for a separate user request.
+### after-skill-creation
 
-The completion workflow must:
+Publishes completed personal skill changes from the local skill collection repository to GitHub. Use after Codex creates or updates a personal skill and the work is ready to validate, commit, and push.
 
-1. Validate the created or updated skill when a validator is available.
-2. Inspect `git status --short --branch`.
-3. Stage only the intended skill files with explicit paths.
-4. Leave unrelated user changes, temporary files, logs, caches, generated previews, and `tmp/` files untouched.
-5. Commit the skill update with a concise message.
-6. Push the current branch to the configured GitHub remote when possible.
+## Repository Notes
 
-Stop and report instead of committing or pushing when:
-
-- The skill is still in progress.
-- Validation fails.
-- The intended files are ambiguous.
-- Unrelated changes are staged.
-- No GitHub remote is configured.
-- Authentication, network access, or permissions block the push.
-
-Do not create helper scripts for this workflow unless the user explicitly asks.
+- Keep one skill per top-level folder.
+- Keep each skill focused on the instructions and resources Codex needs to perform that skill.
+- Do not track system-provided skills, caches, temporary files, generated previews, logs, or local scratch output.
+- Add new skill summaries to this file when new personal skills are added to the repository.

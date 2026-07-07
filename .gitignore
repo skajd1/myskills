@@ -1,0 +1,19 @@
+# Codex/system-managed skills
+.system/
+
+# Local scratch and generated output
+tmp/
+temp/
+*.tmp
+*.log
+
+# Python/cache artifacts
+__pycache__/
+*.py[cod]
+.pytest_cache/
+
+# OS/editor noise
+.DS_Store
+Thumbs.db
+.vscode/
+.idea/
