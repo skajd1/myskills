@@ -139,6 +139,12 @@ def run(args: argparse.Namespace) -> RunResult:
     )
 
 
+def normalize_remote_command(parts: list[str]) -> str:
+    if parts and parts[0] == "--":
+        parts = parts[1:]
+    return " ".join(parts).strip()
+
+
 def parse_args(argv: list[str]) -> argparse.Namespace:
     parser = argparse.ArgumentParser(
         description="Run a single remote command through OpenSSH.",
@@ -173,7 +179,7 @@ def parse_args(argv: list[str]) -> argparse.Namespace:
 
 def main(argv: list[str]) -> int:
     args = parse_args(argv)
-    args.remote_command = " ".join(args.remote_command).strip()
+    args.remote_command = normalize_remote_command(args.remote_command)
     if args.port < 1 or args.port > 65535:
         print("Port must be between 1 and 65535.", file=sys.stderr)
         return 2

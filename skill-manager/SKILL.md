@@ -41,11 +41,17 @@ Use this skill when skill folders under `C:\Users\wooch\.codex\skills` are creat
    - Use explicit paths with `git add`.
    - Re-run `git status --short` and confirm that only intended files are staged.
 
-6. Commit the repository update.
+6. Ask for commit and push approval whenever repository changes were made.
+   - Always ask the user whether to commit the exact changed files.
+   - Include the proposed commit message in the approval question and ask whether that message is acceptable as-is.
+   - Ask whether to push after a successful commit.
+   - Do not commit or push until the user explicitly approves.
+
+7. Commit the repository update.
    - Follow the commit rules below.
    - Do not amend or rewrite existing commits unless the user explicitly asks.
 
-7. Push to GitHub.
+8. Push to GitHub.
    - Push the current branch to the configured GitHub remote.
    - If the branch has no upstream, set the upstream during push.
    - If authentication or remote configuration fails, report the exact blocker and the next command the user should approve or run.
@@ -63,7 +69,9 @@ Use this skill when skill folders under `C:\Users\wooch\.codex\skills` are creat
 
 ## Commit Rules
 
-- Commit only when the user asks to commit, push, publish, sync to GitHub, or otherwise make the repository changes durable.
+- Whenever a skill repository change is made, ask the user for explicit approval before committing.
+- The approval request must list the intended files, the proposed commit message, and whether the user wants a push after commit.
+- Commit only after the user approves the exact commit action and commit message.
 - Stage only explicit intended paths. Use `git add <path>...`, never `git add .` or `git add -A` at repository root when unrelated files may exist.
 - Before committing, run `git status --short` and inspect the staged set.
 - Keep each commit focused on one coherent repository change:
