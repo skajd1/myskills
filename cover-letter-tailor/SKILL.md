@@ -17,6 +17,8 @@ Proceed when the user provides at least:
 - 직무명 or JD
 - 자기소개서 문항
 
+JD가 이미지, 표, 또는 링크의 발췌로 제공되면 실제 공고 내용을 먼저 충실하게 전사한다. 전사한 JD와 이후의 해석·추천은 반드시 구분한다.
+
 If one is missing, ask only for the missing item. If the user provides a maximum character limit, write to 80-95% of that maximum unless they explicitly ask for a shorter answer or the field is a short-answer prompt. Otherwise preserve a concise, submission-ready length.
 
 ## Source Review
@@ -33,6 +35,8 @@ Before drafting, inspect the current workspace for existing 자기소개서 file
 ## Workflow
 
 1. Build a brief company/JD analysis.
+   - Record the supplied JD in the output before analyzing it. Preserve the job title, responsibilities, required qualifications, preferred qualifications, and stated technology stack or selection details when provided.
+   - Label the transcription as `실제 JD` and label any interpretation separately as `기업/JD 분석`.
    - Identify business domain, role mission, required skills, operating environment, and likely evaluation keywords.
    - If current facts are needed or the user asks for detailed/current company analysis, browse and cite sources.
 2. Map each prompt to the best existing experience.
@@ -65,6 +69,22 @@ Create or update a `.md` file under `result/기업명/` using this structure:
 - 지원시기: YYMM
 - 상태: 초안
 
+## 실제 JD
+
+- 출처: 사용자 제공 JD
+
+### 주요 업무
+
+...
+
+### 필수 역량
+
+...
+
+### 우대 역량
+
+...
+
 ## 기업/JD 분석
 
 ...
@@ -89,6 +109,7 @@ Include `작성 조건` under a prompt when the application specifies required s
 Before final response, verify:
 
 - Every prompt has one `답변 제목` and one `답변`.
+- `실제 JD` is present before `기업/JD 분석`, and faithfully separates supplied responsibilities, qualifications, and stated technology or selection details from the analysis.
 - Company name, role name, and contribution sentence match the target company.
 - No unrelated company names remain.
 - Character limits are respected when provided, and answers with a maximum limit use at least 80% of that maximum unless the user asked for brevity.

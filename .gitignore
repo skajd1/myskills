@@ -7,6 +7,8 @@ docs/superpowers/
 # Local scratch and generated output
 tmp/
 temp/
+result/
+_workspace/
 *.tmp
 *.log
 
