@@ -20,16 +20,19 @@ Use this skill when skill folders under `C:\Users\wooch\.codex\skills` are creat
 
 2. Identify the skill changes.
    - Include the new, changed, renamed, or removed skill folder and any directly related repository files the user requested.
-   - If any personal skill is created, removed, renamed, or its purpose/trigger changes, update `AGENTS.md` in the same change. This is mandatory, not optional.
-   - Keep the skill list in `README.md` in sync with current personal skills. Update only the list/summary sections unless the repository usage flow itself changed.
+   - Build the repository skill inventory from personal skill folders that are not matched by `.gitignore`. Treat an ignored skill folder as local-only, even when it exists at the repository root.
+   - If a tracked personal skill is created, removed, renamed, or its purpose/trigger changes, update `AGENTS.md` in the same change. This is mandatory, not optional.
+   - Never list a skill matched by `.gitignore` in the `AGENTS.md` skill index. When adding a skill to `.gitignore`, remove its existing `AGENTS.md` entry in the same change.
+   - Keep the skill list in `README.md` in sync with the same non-ignored personal skill inventory. Update only the list/summary sections unless the repository usage flow itself changed.
    - Keep `.gitignore` aligned with the repository's role as a local skill store.
    - Exclude system-provided skills, temporary files, generated previews, logs, caches, superpowers planning artifacts, and unrelated worktree changes.
    - If the worktree contains unrelated user changes, leave them untouched.
 
 3. Check repository documentation consistency.
-   - Compare top-level personal skill folders with the `AGENTS.md` skill index.
+   - Use `git check-ignore` to exclude local-only skill folders before comparing the inventory.
+   - Compare non-ignored top-level personal skill folders with the `AGENTS.md` skill index.
    - Refuse to commit skill inventory changes if `AGENTS.md` is stale.
-   - Compare top-level personal skill folders with the `README.md` skill list.
+   - Compare the same non-ignored personal skill folders with the `README.md` skill list.
    - Keep `README.md` concise and human-facing; do not duplicate detailed operating rules there.
 
 4. Validate the skill when a validator is available.
@@ -62,8 +65,9 @@ Use this skill when skill folders under `C:\Users\wooch\.codex\skills` are creat
 - Never delete, revert, or overwrite user changes to make the worktree clean.
 - Never commit temporary artifacts unless the user explicitly asks.
 - Never commit `.system/`, `docs/superpowers/`, caches, generated previews, logs, or local scratch output.
-- Never commit a skill creation, deletion, rename, or purpose/trigger change without updating `AGENTS.md`.
-- Never commit a skill creation, deletion, or rename without checking the `README.md` skill list.
+- Never add a skill matched by `.gitignore` to the `AGENTS.md` or `README.md` skill inventory.
+- Never commit a non-ignored skill creation, deletion, rename, or purpose/trigger change without updating `AGENTS.md`.
+- Never commit a non-ignored skill creation, deletion, or rename without checking the `README.md` skill list.
 - Never create PowerShell, shell, Python, or other helper scripts for this skill unless requested.
 - Prefer exact file paths in every Git command.
 
