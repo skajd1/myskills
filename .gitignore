@@ -1,6 +1,10 @@
 # Codex/system-managed skills
 .system/
 
+# Local-only personal skills
+hatch-pet/
+uface-performance-test/
+
 # Planning/design artifacts from superpowers workflows
 docs/superpowers/
 
