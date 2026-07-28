@@ -1,6 +1,6 @@
 ---
 name: skill-manager
-description: Manage this personal Codex skill repository at C:\Users\wooch\.codex\skills. Use when the user asks to create, update, rename, remove, validate, commit, or push personal skills; sync local skill changes to GitHub; update AGENTS.md or .gitignore for the skill repo; or says "스킬 관리", "스킬 repo 반영", "스킬 만든 뒤 깃허브에 올려", "개인 스킬을 repo에 반영".
+description: Manage the current personal Codex skill repository. Use when the user asks to create, update, rename, remove, validate, commit, or push personal skills; sync local skill changes to GitHub; update AGENTS.md or .gitignore for the skill repo; or says "스킬 관리", "스킬 repo 반영", "스킬 만든 뒤 깃허브에 올려", "개인 스킬을 repo에 반영".
 ---
 
 # Skill Manager
@@ -9,7 +9,7 @@ description: Manage this personal Codex skill repository at C:\Users\wooch\.code
 
 Maintain the user's personal Codex skill collection as both a local skill store and a Git repository.
 
-Use this skill when skill folders under `C:\Users\wooch\.codex\skills` are created, updated, renamed, removed, validated, committed, or pushed. Do not create helper scripts or automation files unless the user explicitly asks for them.
+Use this skill when folders in the current personal Codex skill repository are created, updated, renamed, removed, validated, committed, or pushed. Resolve repository files relative to the repository root. Do not create helper scripts or automation files unless the user explicitly asks for them.
 
 ## Workflow
 

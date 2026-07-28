@@ -1,6 +1,6 @@
 # My Codex Skills
 
-개인 Codex 스킬을 관리하는 저장소입니다. 이 저장소는 GitHub 백업용 repo이면서, 로컬에서는 `C:\Users\wooch\.codex\skills` 경로의 실제 Codex 스킬 저장소로 사용합니다.
+개인 Codex 스킬을 관리하는 저장소입니다. 이 저장소는 GitHub 백업용 repo이면서, 로컬에서는 Codex 스킬 저장소 루트로 사용합니다.
 
 ## 구조
 
@@ -42,7 +42,7 @@ Outlook으로 받은 검사 PDF를 스캔하고 고객사를 식별한 뒤, 승�
 
 ### ssh-runner
 
-Windows의 로컬 개인키와 스킬의 호스트 별칭 설정으로 SSH 서버에 접속해 제한된 원격 명령을 실행하고 결과를 요약합니다.
+OpenSSH 클라이언트와 로컬 전용 호스트 별칭 설정으로 SSH 서버에 접속해 제한된 원격 명령을 실행하고 결과를 요약합니다.
 
 ### structured-commit-message
 
@@ -74,6 +74,4 @@ Windows의 로컬 개인키와 스킬의 호스트 별칭 설정으로 SSH 서�
 
 ## 원격 저장소
 
-GitHub repo:
-
-https://github.com/skajd1/myskills
+현재 원격 저장소는 `git remote get-url origin`으로 확인합니다.

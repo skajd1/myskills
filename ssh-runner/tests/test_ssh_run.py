@@ -18,29 +18,41 @@ spec.loader.exec_module(ssh_run)
 class ParseArgsTests(unittest.TestCase):
     def test_double_dash_separator_is_not_part_of_remote_command(self):
         args = ssh_run.parse_args(
-            ["--target", "85", "--", "uname -a"]
+            ["--target", "example-host", "--", "uname -a"]
         )
 
         self.assertEqual(ssh_run.normalize_remote_command(args.remote_command), "uname -a")
 
     def test_remote_command_without_separator_still_works(self):
         args = ssh_run.parse_args(
-            ["--target", "85", "df -h"]
+            ["--target", "example-host", "df -h"]
         )
 
         self.assertEqual(ssh_run.normalize_remote_command(args.remote_command), "df -h")
 
     def test_build_command_uses_only_the_selected_identity(self):
-        args = ssh_run.parse_args(["--target", "85", "--", "true"])
+        identity = Path(".ssh") / "test_key"
+        args = ssh_run.parse_args(
+            ["--identity", str(identity), "--target", "example-host", "--", "true"]
+        )
 
-        with mock.patch.object(ssh_run.shutil, "which", return_value="ssh.exe"):
+        with mock.patch.object(ssh_run.shutil, "which", return_value="ssh"):
             command = ssh_run.build_ssh_command(args)
 
-        self.assertIn(str(Path.home() / ".ssh" / "uface_id_rsa"), command)
+        self.assertIn(str(identity), command)
         self.assertIn(str(SCRIPT_PATH.parents[1] / "config" / "hosts.conf"), command)
         self.assertIn("BatchMode=yes", command)
         self.assertIn("IdentitiesOnly=yes", command)
         self.assertNotIn("paramiko", " ".join(command).lower())
+
+    def test_build_command_lets_openssh_resolve_identity_by_default(self):
+        args = ssh_run.parse_args(["--target", "example-host", "--", "true"])
+
+        with mock.patch.object(ssh_run.shutil, "which", return_value="ssh"):
+            command = ssh_run.build_ssh_command(args)
+
+        self.assertNotIn("-i", command)
+        self.assertNotIn("IdentitiesOnly=yes", command)
 
 
 if __name__ == "__main__":

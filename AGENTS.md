@@ -22,7 +22,7 @@ Outlook으로 받은 검사 PDF를 스캔하고 고객사를 식별한 뒤, 승�
 
 ### ssh-runner
 
-Windows의 로컬 개인키와 스킬의 호스트 별칭 설정으로 SSH 서버에 접속해 제한된 원격 명령을 실행하고 결과를 요약합니다.
+OpenSSH 클라이언트와 로컬 전용 호스트 별칭 설정으로 SSH 서버에 접속해 제한된 원격 명령을 실행하고 결과를 요약합니다.
 
 ### structured-commit-message
 

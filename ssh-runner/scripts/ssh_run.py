@@ -1,5 +1,5 @@
 #!/usr/bin/env python3
-"""Run a bounded private-key SSH command through Windows OpenSSH."""
+"""Run a bounded SSH command through an OpenSSH client."""
 
 from __future__ import annotations
 
@@ -52,23 +52,22 @@ def redact(text: str) -> str:
 def build_ssh_command(args: argparse.Namespace) -> list[str]:
     ssh = shutil.which("ssh")
     if ssh is None:
-        raise SystemExit("Windows OpenSSH client was not found on PATH.")
+        raise SystemExit("OpenSSH client was not found on PATH.")
 
     command = [ssh]
     command.extend(
         [
             "-F",
             str(args.config),
-            "-i",
-            str(args.identity),
             "-o",
             f"ConnectTimeout={args.connect_timeout}",
             "-o",
             "BatchMode=yes",
-            "-o",
-            "IdentitiesOnly=yes",
         ]
     )
+
+    if args.identity is not None:
+        command.extend(["-i", str(args.identity), "-o", "IdentitiesOnly=yes"])
 
     if args.accept_new_host_key:
         command.extend(["-o", "StrictHostKeyChecking=accept-new"])
@@ -114,17 +113,16 @@ def ensure_local_config(config_path: Path) -> bool:
 
 def parse_args(argv: list[str]) -> argparse.Namespace:
     parser = argparse.ArgumentParser(
-        description="Run a single remote command through Windows OpenSSH with a private key.",
+        description="Run a single remote command through an OpenSSH client.",
         epilog=(
-            "Example: ssh_run.py --target 85 -- 'uname -a'"
+            "Example: ssh_run.py --target example-host -- 'uname -a'"
         ),
     )
     skill_root = Path(__file__).resolve().parents[1]
     parser.add_argument(
         "--identity",
         type=Path,
-        default=Path.home() / ".ssh" / "uface_id_rsa",
-        help="Local private-key path. Defaults to ~/.ssh/uface_id_rsa.",
+        help="Optional local private-key path. Otherwise OpenSSH resolves the identity.",
     )
     parser.add_argument(
         "--config",
@@ -160,7 +158,7 @@ def main(argv: list[str]) -> int:
     if not args.config.is_file():
         print(f"SSH config does not exist: {args.config}", file=sys.stderr)
         return 2
-    if not args.identity.is_file():
+    if args.identity is not None and not args.identity.is_file():
         print(f"Identity file does not exist: {args.identity}", file=sys.stderr)
         return 2
     try:

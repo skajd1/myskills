@@ -9,48 +9,50 @@ Use this skill for on-demand inspection document intake from Outlook to SharePoi
 
 ## Required Workflow
 
-1. Locate the config file. If the user does not provide one, create a starter config:
+Run the commands below from this skill directory with an available Python 3 interpreter.
 
-```powershell
-& 'C:\Users\wooch\AppData\Local\Programs\Python\Python313\python.exe' 'C:\Users\wooch\.codex\skills\inspection-uploader\scripts\inspection_uploader.py' init-config --out 'C:\Users\wooch\.codex\inspection-uploader\config.yaml' --account-email <outlook-email>
+1. Locate the config file. If the user does not provide one, create a starter config at a local path outside Git:
+
+```text
+python scripts/inspection_uploader.py init-config --out <config-path> --account-email <outlook-email>
 ```
 
 Then ask the user to fill `graph.client_id` and each customer SharePoint mapping. A customer target may use either `sharepoint.site_url` + `drive_name` + `folder_path`, `site_url` + `drive_name` + `folder_path_template` for monthly folders, or a folder `sharepoint.share_link`.
 2. For live Outlook/SharePoint use, ensure the config has `graph.client_id`. Never put the user's Microsoft password into any command, file, or script. Use device-code OAuth:
 
-```powershell
-& 'C:\Users\wooch\AppData\Local\Programs\Python\Python313\python.exe' 'C:\Users\wooch\.codex\skills\inspection-uploader\scripts\inspection_uploader.py' auth --config <config-path>
+```text
+python scripts/inspection_uploader.py auth --config <config-path>
 ```
 
 3. Run config validation:
 
-```powershell
-& 'C:\Users\wooch\AppData\Local\Programs\Python\Python313\python.exe' 'C:\Users\wooch\.codex\skills\inspection-uploader\scripts\inspection_uploader.py' validate-config --config <config-path>
+```text
+python scripts/inspection_uploader.py validate-config --config <config-path>
 ```
 
 4. Run scan when live dependencies are configured. This downloads PDF attachments and renders each first page to a `preview_image` PNG for Codex inspection:
 
-```powershell
-& 'C:\Users\wooch\AppData\Local\Programs\Python\Python313\python.exe' 'C:\Users\wooch\.codex\skills\inspection-uploader\scripts\inspection_uploader.py' scan --config <config-path> --since-days 7 --out <state-path>
+```text
+python scripts/inspection_uploader.py scan --config <config-path> --since-days 7 --out <state-path>
 ```
 
 5. Show candidates:
 
-```powershell
-& 'C:\Users\wooch\AppData\Local\Programs\Python\Python313\python.exe' 'C:\Users\wooch\.codex\skills\inspection-uploader\scripts\inspection_uploader.py' show --state <state-path>
+```text
+python scripts/inspection_uploader.py show --state <state-path>
 ```
 
 6. For rows with `match.status = needs_codex_vision`, open each `preview_image`, read the customer name from the first page yourself, and assign the configured customer:
 
-```powershell
-& 'C:\Users\wooch\AppData\Local\Programs\Python\Python313\python.exe' 'C:\Users\wooch\.codex\skills\inspection-uploader\scripts\inspection_uploader.py' set-customer --config <config-path> --state <state-path> --id <candidate-id> --customer-id <customer-id> --evidence "Codex read the first-page preview image."
+```text
+python scripts/inspection_uploader.py set-customer --config <config-path> --state <state-path> --id <candidate-id> --customer-id <customer-id> --evidence "Codex read the first-page preview image."
 ```
 
 7. Show candidates again and ask the user which candidate IDs to handle. Do not proceed with unmatched, ambiguous, or `needs_codex_vision` rows.
 8. For the normal/manual workflow, open the approved rows' SharePoint target folder links and let the user upload the prepared PDFs:
 
-```powershell
-& 'C:\Users\wooch\AppData\Local\Programs\Python\Python313\python.exe' 'C:\Users\wooch\.codex\skills\inspection-uploader\scripts\inspection_uploader.py' open-targets --state <state-path> --ids <id,id> --open
+```text
+python scripts/inspection_uploader.py open-targets --state <state-path> --ids <id,id> --open
 ```
 
 9. Tell the user the prepared local PDF path and the opened SharePoint folder. If admin-approved Graph upload is later enabled, `upload --config <config-path> --state <state-path> --ids <id,id>` remains available as an optional command.
