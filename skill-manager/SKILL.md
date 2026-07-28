@@ -1,101 +1,44 @@
 ---
 name: skill-manager
-description: Manage the current personal Codex skill repository. Use when the user asks to create, update, rename, remove, validate, commit, or push personal skills; sync local skill changes to GitHub; update AGENTS.md or .gitignore for the skill repo; or says "스킬 관리", "스킬 repo 반영", "스킬 만든 뒤 깃허브에 올려", "개인 스킬을 repo에 반영".
+description: 개인 Codex 스킬 저장소를 관리한다. 개인 스킬 생성·수정·이름 변경·삭제·검증·커밋·푸시, GitHub 동기화, AGENTS.md·README.md·.gitignore 정리가 필요할 때 사용한다.
 ---
 
-# Skill Manager
+# 개인 스킬 저장소 관리
 
-## Goal
+현재 저장소를 로컬 스킬 저장소이자 Git 저장소로 관리한다. 모든 경로는 저장소 루트를 기준으로 해석한다.
 
-Maintain the user's personal Codex skill collection as both a local skill store and a Git repository.
+## 기본 원칙
 
-Use this skill when folders in the current personal Codex skill repository are created, updated, renamed, removed, validated, committed, or pushed. Resolve repository files relative to the repository root. Do not create helper scripts or automation files unless the user explicitly asks for them.
+- 사용자 요청과 직접 관련된 파일만 변경하고, 기존의 무관한 변경은 보존한다.
+- `.gitignore`에 해당하는 스킬과 로컬 설정은 로컬 전용으로 취급한다.
+- `.system/`, 캐시, 로그, 임시 파일, 생성 결과물, `docs/superpowers/`는 커밋하지 않는다.
+- 저장소 전체를 한꺼번에 스테이징하지 않고 파일 경로를 명시한다.
+- 사용자가 요청하지 않은 보조 스크립트나 자동화 파일을 만들지 않는다.
 
-## Workflow
+## 작업 순서
 
-1. Confirm the repository context.
-   - Run `git status --short --branch`.
-   - Run `git remote -v`.
-   - If no GitHub remote is configured, ask the user for the target repository URL before pushing.
+1. `git status --short --branch`와 `git remote -v`로 저장소 상태를 확인한다.
+2. 변경 대상을 정하고 `git check-ignore`로 로컬 전용 항목을 제외한다.
+3. 추적되는 개인 스킬을 추가·삭제·이름 변경하거나 목적·트리거를 바꾸면 다음 문서를 함께 갱신한다.
+   - `AGENTS.md`: 스킬 인덱스와 필수 운영 지침
+   - `README.md`: 사람이 읽는 스킬 목록과 요약
+   - 무시된 스킬은 두 인덱스에 넣지 않는다.
+4. 가능한 경우 `quick_validate.py <skill-folder>`로 변경된 스킬을 검증한다.
+5. 의도한 파일만 `git add <path>...`로 스테이징하고 staged 목록을 다시 확인한다.
+6. 커밋 전에 사용자에게 다음 내용을 제시하고 명시적 승인을 받는다.
+   - 커밋할 파일
+   - 제안 커밋 메시지
+   - 커밋 후 푸시 여부
+7. 승인된 변경만 커밋하고 요청된 경우 현재 브랜치를 원격에 푸시한다.
 
-2. Identify the skill changes.
-   - Include the new, changed, renamed, or removed skill folder and any directly related repository files the user requested.
-   - Build the repository skill inventory from personal skill folders that are not matched by `.gitignore`. Treat an ignored skill folder as local-only, even when it exists at the repository root.
-   - If a tracked personal skill is created, removed, renamed, or its purpose/trigger changes, update `AGENTS.md` in the same change. This is mandatory, not optional.
-   - Never list a skill matched by `.gitignore` in the `AGENTS.md` skill index. When adding a skill to `.gitignore`, remove its existing `AGENTS.md` entry in the same change.
-   - Keep the skill list in `README.md` in sync with the same non-ignored personal skill inventory. Update only the list/summary sections unless the repository usage flow itself changed.
-   - Keep `.gitignore` aligned with the repository's role as a local skill store.
-   - Exclude system-provided skills, temporary files, generated previews, logs, caches, superpowers planning artifacts, and unrelated worktree changes.
-   - If the worktree contains unrelated user changes, leave them untouched.
+## 커밋 규칙
 
-3. Check repository documentation consistency.
-   - Use `git check-ignore` to exclude local-only skill folders before comparing the inventory.
-   - Compare non-ignored top-level personal skill folders with the `AGENTS.md` skill index.
-   - Refuse to commit skill inventory changes if `AGENTS.md` is stale.
-   - Compare the same non-ignored personal skill folders with the `README.md` skill list.
-   - Keep `README.md` concise and human-facing; do not duplicate detailed operating rules there.
-
-4. Validate the skill when a validator is available.
-   - Prefer the skill creator validator when available: `quick_validate.py <path-to-skill-folder>`.
-   - If validation cannot run, report why and continue only if the files are simple enough to inspect manually.
-   - Check that `SKILL.md` has valid YAML frontmatter with only `name` and `description`.
-
-5. Stage only the intended files.
-   - Use explicit paths with `git add`.
-   - Re-run `git status --short` and confirm that only intended files are staged.
-
-6. Ask for commit and push approval whenever repository changes were made.
-   - Always ask the user whether to commit the exact changed files.
-   - Include the proposed commit message in the approval question and ask whether that message is acceptable as-is.
-   - Ask whether to push after a successful commit.
-   - Do not commit or push until the user explicitly approves.
-
-7. Commit the repository update.
-   - Follow the commit rules below.
-   - Do not amend or rewrite existing commits unless the user explicitly asks.
-
-8. Push to GitHub.
-   - Push the current branch to the configured GitHub remote.
-   - If the branch has no upstream, set the upstream during push.
-   - If authentication or remote configuration fails, report the exact blocker and the next command the user should approve or run.
-
-## Safety Rules
-
-- Never stage the entire repository with `git add .` when unrelated files are present.
-- Never delete, revert, or overwrite user changes to make the worktree clean.
-- Never commit temporary artifacts unless the user explicitly asks.
-- Never commit `.system/`, `docs/superpowers/`, caches, generated previews, logs, or local scratch output.
-- Never add a skill matched by `.gitignore` to the `AGENTS.md` or `README.md` skill inventory.
-- Never commit a non-ignored skill creation, deletion, rename, or purpose/trigger change without updating `AGENTS.md`.
-- Never commit a non-ignored skill creation, deletion, or rename without checking the `README.md` skill list.
-- Never create PowerShell, shell, Python, or other helper scripts for this skill unless requested.
-- Prefer exact file paths in every Git command.
-
-## Commit Rules
-
-- Whenever a skill repository change is made, ask the user for explicit approval before committing.
-- The approval request must list the intended files, the proposed commit message, and whether the user wants a push after commit.
-- Commit only after the user approves the exact commit action and commit message.
-- Stage only explicit intended paths. Use `git add <path>...`, never `git add .` or `git add -A` at repository root when unrelated files may exist.
-- Before committing, run `git status --short` and inspect the staged set.
-- Keep each commit focused on one coherent repository change:
-  - Skill inventory or metadata update: `Update skill repository metadata`
-  - New skill: `Add <skill-name> skill`
-  - Existing skill change: `Update <skill-name> skill`
-  - Rename: `Rename <old-name> skill to <new-name>`
-  - Removal: `Remove <skill-name> skill`
-- If a change touches multiple skills as one intentional repo sync, use `Update personal skill repository`.
-- Use imperative, concise commit messages with no trailing period.
-- Do not include temporary files, generated previews, logs, cache files, local config, credentials, `.system/`, or `docs/superpowers/`.
-- Do not commit a skill inventory change unless `AGENTS.md` is updated and the `README.md` skill list has been checked.
-- After committing, push only when the user requested push/sync/publish or clearly wants GitHub updated.
-- After push, report the commit hash, message, branch, and remote.
-
-## Completion Report
-
-When finished, report:
-
-- The skill path changed.
-- Whether validation passed or why it was skipped.
-- The commit hash and message, if committed.
-- The pushed branch and remote, if pushed.
+- 하나의 목적만 담고 명령형 영문 제목을 사용한다.
+- 기본 메시지는 다음 형식을 따른다.
+  - 새 스킬: `Add <skill-name> skill`
+  - 기존 스킬 수정: `Update <skill-name> skill`
+  - 이름 변경: `Rename <old-name> skill to <new-name>`
+  - 삭제: `Remove <skill-name> skill`
+  - 여러 스킬 동기화: `Update personal skill repository`
+- 사용자가 명시하지 않으면 기존 커밋을 수정하거나 이력을 재작성하지 않는다.
+- 푸시 후 커밋 해시, 메시지, 브랜치, 원격을 보고한다.
