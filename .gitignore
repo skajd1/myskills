@@ -6,6 +6,9 @@ hatch-pet/
 uface-performance-test/
 youtube-shorts-pipeline/
 
+# Local-only SSH host aliases
+ssh-runner/config/hosts.conf
+
 # Planning/design artifacts from superpowers workflows
 docs/superpowers/
 

@@ -21,6 +21,16 @@ SECRET_PATTERNS = [
     re.compile(r"-----BEGIN [A-Z ]*PRIVATE KEY-----.*?-----END [A-Z ]*PRIVATE KEY-----", re.DOTALL),
 ]
 
+LOCAL_CONFIG_STARTER = """# Local-only OpenSSH host aliases.
+# This file is intentionally ignored by Git.
+#
+# Example:
+# Host example
+#     HostName 192.0.2.10
+#     User your-user
+#     Port 22
+"""
+
 
 @dataclass(frozen=True)
 class RunResult:
@@ -94,6 +104,14 @@ def normalize_remote_command(parts: list[str]) -> str:
     return " ".join(parts).strip()
 
 
+def ensure_local_config(config_path: Path) -> bool:
+    if config_path.exists():
+        return False
+    config_path.parent.mkdir(parents=True, exist_ok=True)
+    config_path.write_text(LOCAL_CONFIG_STARTER, encoding="utf-8", newline="\n")
+    return True
+
+
 def parse_args(argv: list[str]) -> argparse.Namespace:
     parser = argparse.ArgumentParser(
         description="Run a single remote command through Windows OpenSSH with a private key.",
@@ -131,6 +149,13 @@ def main(argv: list[str]) -> int:
     args.remote_command = normalize_remote_command(args.remote_command)
     if not args.remote_command:
         print("Remote command is required after --.", file=sys.stderr)
+        return 2
+    if ensure_local_config(args.config):
+        print(
+            f"Created local SSH config starter: {args.config}\n"
+            "Add authorized host aliases locally, then run the command again.",
+            file=sys.stderr,
+        )
         return 2
     if not args.config.is_file():
         print(f"SSH config does not exist: {args.config}", file=sys.stderr)

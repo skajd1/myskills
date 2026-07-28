@@ -9,7 +9,9 @@ Use this skill for bounded private-key SSH command execution on servers the user
 
 ## Essentials
 
-1. Select a target alias from `config/hosts.conf` and get the remote command.
+1. Select a target alias from the local-only `config/hosts.conf` and get the remote command.
+   - Never commit this file or disclose its contents.
+   - If it is missing, run the runner once to create a commented local starter file, then add the authorized host aliases locally.
 2. Use `%USERPROFILE%\.ssh\uface_id_rsa` by default or pass another local key with `--identity`. Never read, print, copy, or commit key contents.
 3. Keep normal host-key verification. Use `--accept-new-host-key` only after the user confirms the server identity.
 4. Confirm before privileged, state-changing, destructive, reboot, service-stop, firewall, credential, database, or production deploy commands.
@@ -25,4 +27,4 @@ Use `scripts/ssh_run.py` from this skill directory with the user-level Python be
 & 'C:\Users\wooch\AppData\Local\Programs\Python\Python313\python.exe' scripts/ssh_run.py --identity C:\Users\wooch\.ssh\another_key --target ktnf -- "tail -n 100 /var/log/app.log"
 ```
 
-The `--` separator is required before the remote command. Prefer one bounded command over opening an interactive shell. Update `config/hosts.conf` only when aliases, hosts, users, or ports change.
+The `--` separator is required before the remote command. Prefer one bounded command over opening an interactive shell. Update the ignored, local-only `config/hosts.conf` only when aliases, hosts, users, or ports change. If the file is absent, the runner creates a commented starter file locally and exits so it can be configured before use.

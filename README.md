@@ -70,6 +70,7 @@ Windows의 로컬 개인키와 스킬의 호스트 별칭 설정으로 SSH 서�
 - 로그
 - 생성 미리보기
 - 로컬 스크래치 출력
+- `ssh-runner/config/hosts.conf`의 로컬 SSH 호스트 별칭
 
 ## 원격 저장소
 
