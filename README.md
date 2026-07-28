@@ -13,7 +13,8 @@
 ├─ cover-letter-tailor/
 ├─ humanize-korean/
 ├─ inspection-uploader/
-└─ ssh-runner/
+├─ ssh-runner/
+└─ structured-commit-message/
 ```
 
 - `AGENTS.md`: Codex가 이 저장소에서 따라야 할 운영 규칙
@@ -42,6 +43,10 @@ Outlook으로 받은 검사 PDF를 스캔하고 고객사를 식별한 뒤, 승�
 ### ssh-runner
 
 Windows의 로컬 개인키와 스킬의 호스트 별칭 설정으로 SSH 서버에 접속해 제한된 원격 명령을 실행하고 결과를 요약합니다.
+
+### structured-commit-message
+
+솔루션, ADMIN, API 등 여러 저장소에서 변경 내용을 분석하고 저장소별 설정에 맞는 구조화된 한국어 커밋 메시지와 릴리즈노트 메타데이터를 작성합니다.
 
 ## 관리 흐름
 

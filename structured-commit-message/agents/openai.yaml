@@ -1,0 +1,4 @@
+interface:
+  display_name: "구조화 커밋 메시지"
+  short_description: "저장소별 규칙으로 구조화된 커밋 메시지 작성"
+  default_prompt: "Use $structured-commit-message to analyze staged changes and draft a structured Korean commit message."
