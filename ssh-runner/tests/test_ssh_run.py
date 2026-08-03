@@ -45,14 +45,21 @@ class ParseArgsTests(unittest.TestCase):
         self.assertIn("IdentitiesOnly=yes", command)
         self.assertNotIn("paramiko", " ".join(command).lower())
 
-    def test_build_command_lets_openssh_resolve_identity_by_default(self):
+    def test_build_command_uses_skill_local_identity_by_default(self):
         args = ssh_run.parse_args(["--target", "example-host", "--", "true"])
 
         with mock.patch.object(ssh_run.shutil, "which", return_value="ssh"):
             command = ssh_run.build_ssh_command(args)
 
-        self.assertNotIn("-i", command)
-        self.assertNotIn("IdentitiesOnly=yes", command)
+        self.assertIn("-i", command)
+        self.assertIn(str(ssh_run.DEFAULT_IDENTITY), command)
+        self.assertIn("IdentitiesOnly=yes", command)
+
+    def test_default_identity_is_inside_the_skill_and_git_ignored_directory(self):
+        self.assertEqual(
+            ssh_run.DEFAULT_IDENTITY,
+            SCRIPT_PATH.parents[1] / "config" / "identities" / "default",
+        )
 
 
 if __name__ == "__main__":

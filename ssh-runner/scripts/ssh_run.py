@@ -31,6 +31,9 @@ LOCAL_CONFIG_STARTER = """# Local-only OpenSSH host aliases.
 #     Port 22
 """
 
+SKILL_ROOT = Path(__file__).resolve().parents[1]
+DEFAULT_IDENTITY = SKILL_ROOT / "config" / "identities" / "default"
+
 
 @dataclass(frozen=True)
 class RunResult:
@@ -118,16 +121,19 @@ def parse_args(argv: list[str]) -> argparse.Namespace:
             "Example: ssh_run.py --target example-host -- 'uname -a'"
         ),
     )
-    skill_root = Path(__file__).resolve().parents[1]
     parser.add_argument(
         "--identity",
         type=Path,
-        help="Optional local private-key path. Otherwise OpenSSH resolves the identity.",
+        default=DEFAULT_IDENTITY,
+        help=(
+            "Private-key path. Defaults to the Git-ignored skill-local "
+            "config/identities/default file."
+        ),
     )
     parser.add_argument(
         "--config",
         type=Path,
-        default=skill_root / "config" / "hosts.conf",
+        default=SKILL_ROOT / "config" / "hosts.conf",
         help="OpenSSH host config. Defaults to this skill's config/hosts.conf.",
     )
     parser.add_argument("--target", required=True, help="Host alias from config/hosts.conf.")
@@ -158,8 +164,13 @@ def main(argv: list[str]) -> int:
     if not args.config.is_file():
         print(f"SSH config does not exist: {args.config}", file=sys.stderr)
         return 2
-    if args.identity is not None and not args.identity.is_file():
-        print(f"Identity file does not exist: {args.identity}", file=sys.stderr)
+    if not args.identity.is_file():
+        print(
+            "Skill-local SSH identity is missing. Ask the user for the exact path of an "
+            "authorized private key, then copy it without reading its contents to: "
+            f"{DEFAULT_IDENTITY}",
+            file=sys.stderr,
+        )
         return 2
     try:
         result = run(args)

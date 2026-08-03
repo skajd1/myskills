@@ -8,6 +8,7 @@ youtube-shorts-pipeline/
 
 # Local-only SSH host aliases
 ssh-runner/config/hosts.conf
+ssh-runner/config/identities/
 
 # Planning/design artifacts from superpowers workflows
 docs/superpowers/
